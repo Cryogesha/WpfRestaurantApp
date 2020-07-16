@@ -1,0 +1,51 @@
+﻿<Window x:Class="Restaurant2.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Restaurant2"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d" x:Name="loginWindow"
+        Title="LoginWindow" Height="200" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <local:LoginViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+            <StackPanel DataContext="{Binding User}">
+                <Label Content="Login"/>
+                <TextBox Text="{Binding Login, Mode=TwoWay}"/>
+                <Label Content="Password"/>
+                <TextBox Text="{Binding Password, Mode=TwoWay}"/>
+            </StackPanel>
+            <Button Margin="0,15,0,0" Content="Sign in" Background="AliceBlue">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=loginWindow}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Margin="0,5,0,0">
+                <Button.Template>
+                    <ControlTemplate>
+                        <TextBlock x:Name="registerButton" Text="Register" TextAlignment="Center" Foreground="Blue" TextDecorations="{Binding Decoration}" Cursor="Hand">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseEnter">
+                                    <i:InvokeCommandAction Command="{Binding UnderlineAddCommand}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeave">
+                                    <i:InvokeCommandAction Command="{Binding UnderlineRemoveCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBlock>
+                    </ControlTemplate>
+                </Button.Template>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding RunRegisterWindowCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

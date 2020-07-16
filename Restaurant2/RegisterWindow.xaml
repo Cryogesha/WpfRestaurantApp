@@ -1,0 +1,33 @@
+﻿<Window x:Class="Restaurant2.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:Restaurant2"
+        mc:Ignorable="d"
+        Title="RegisterWindow" Height="230" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Window.DataContext>
+        <local:RegisterViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
+            <StackPanel  DataContext="{Binding NewUser}">
+                <Label Content="Login"/>
+                <TextBox Text="{Binding Login, Mode=TwoWay}"/>
+                <Label Content="Password"/>
+                <TextBox Text="{Binding Password, Mode=TwoWay}"/>
+                <Label Content="Confirm password"/>
+                <TextBox x:Name="confirmPass"/>
+            </StackPanel>
+            <Button Margin="0,15,0,0" Content="Register" Background="AliceBlue">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=confirmPass, Path=Text}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <TextBlock Text="{Binding ResultText}"/>
+        </StackPanel>
+    </Grid>
+</Window>

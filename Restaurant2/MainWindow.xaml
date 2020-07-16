@@ -1,0 +1,119 @@
+﻿<Window x:Class="Restaurant2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Restaurant2"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d"
+        Title="Restaurant" Height="350" Width="400" MinWidth="300" WindowStartupLocation="CenterScreen" x:Name="mainWindow">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding WindowClosingCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <DockPanel Background="#0747A6" Margin="0">
+        <ToolBar DockPanel.Dock="Top">
+            <Button Content="Exit">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding ExitAccountCommand}" CommandParameter="{Binding ElementName=mainWindow}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </ToolBar>
+        <TabControl Padding="0" Margin="0" DockPanel.Dock="Bottom">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Grid x:Name="panel" Background="AliceBlue" VerticalAlignment="Stretch" Margin="-2 -2 0 0">
+                                    <ContentPresenter x:Name="contentSite" ContentSource="Header" Margin="10,2" VerticalAlignment="Center"/>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="panel" Property="Background" Value="#18FBFF"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="Make an order">
+                <StackPanel HorizontalAlignment="Center" Width="300">
+                    <Label Content="Choose the category"></Label>
+                    <ComboBox ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding ChangeFoodList}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"></TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Label Content="Choose the food"></Label>
+                    <ComboBox x:Name="cmbFood" ItemsSource="{Binding TempFoods}" IsEnabled="{Binding FoodCBEnabled}" SelectedItem="{Binding SelectedFood}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"></TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding FoodCBSelectionChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ComboBox>
+                    <StackPanel DataContext="{Binding SelectedFood}">
+                        <Label Content="Price" Margin="0,20,0,0"/>
+                        <TextBox IsEnabled="False" Text="{Binding Price}"/>
+                    </StackPanel>
+                    <Button Height="50" Content="Order" Margin="0,20,0,0" Background="AliceBlue" IsEnabled="{Binding OrderButtonEnabled}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <i:InvokeCommandAction Command="{Binding AddOrder}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Orders">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Grid.Column="0" ItemsSource="{Binding Orders}" SelectedItem="{Binding SelectedOrder}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5">
+                                    <TextBlock FontSize="18" DataContext="{Binding Food}" Text="{Binding Name}"/>
+                                    <TextBlock Text="{Binding Finish}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding OrderSelectChange}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </ListBox>
+                    <StackPanel Grid.Column="1">
+                        <Button Background="AliceBlue" Content="Remove order" IsEnabled="{Binding RemoveButtonEnabled}" Margin="20" Height="30">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction Command="{Binding RemoveOrder}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
